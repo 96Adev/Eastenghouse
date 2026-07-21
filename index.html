@@ -53,6 +53,7 @@
   ul{ list-style:none; }
   img,svg{ display:block; max-width:100%; }
   .wrap{ max-width:var(--max); margin:0 auto; padding:0 28px; }
+  .hero .wrap{ position:relative; }
 
   h1,h2,h3{ font-family:var(--font-display); letter-spacing:-0.01em; }
 
@@ -206,7 +207,8 @@
     .hero-panel{
       position:absolute;
       top:50%; right:0;
-      width:clamp(380px, 42vw, 640px);
+      width:56%;
+      max-width:820px;
       margin:0;
       transform:translateY(-50%);
     }
@@ -251,7 +253,7 @@
     animation:mark-in .3s ease-out forwards;
   }
   .callout-label{
-    font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.03em;
+    font-family:var(--font-mono); font-size:0.78rem; letter-spacing:0.03em;
     color:#fff; background:rgba(17,21,27,0.55);
     padding:4px 9px; border-radius:2px; white-space:nowrap;
     transform:translate(6px,-50%);
@@ -462,10 +464,10 @@
       <div class="hero-panel-fade"></div>
 
       <svg class="callout-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <path class="co co-1" d="M31.6,10.7 L48,10.7 L48,38 L62,38" />
+        <path class="co co-1" d="M31.6,10.7 L44,10.7 L44,38 L62,38" />
         <path class="co co-2" d="M29.5,29.8 L52,29.8 L52,47 L68,47" />
-        <path class="co co-3" d="M34.3,47.6 L58,47.6 L58,52 L80,52" />
-        <path class="co co-4" d="M32.3,66.7 L64,66.7 L64,55 L93,55" />
+        <path class="co co-3" d="M34.3,47.6 L60,47.6 L60,52 L80,52" />
+        <path class="co co-4" d="M32.3,66.7 L68,66.7 L68,55 L93,55" />
       </svg>
 
       <span class="callout-dot cd-1"></span>
