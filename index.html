@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EASTENGHOUSE | Independent Power Systems Engineering &amp; Testing</title>
+<meta name="description" content="EASTENGHOUSE Inc. is an independent, third-party electrical power systems engineering and testing specialist, unbiased and independent of manufacturers, suppliers and installers.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================
+     DESIGN TOKENS
+     Everything below derives from this palette/type
+     system. Change values here to re-theme the site.
+     ============================================ */
+  :root{
+    --bg-dark:      #1f497d;   /* EASTENGHOUSE brand navy */
+    --panel-dark:   #24578f;
+    --bg-light:     #eef2f6;
+    --panel-light:  #ffffff;
+    --ink:          #16232f;
+    --ink-soft:     #526073;
+    --paper:        #e9ebee;
+    --paper-soft:   #b7c4d4;
+
+    --trace:        #ffffff;   /* oscilloscope trace — white on brand navy */
+    --trace-dim:    #1f497d;
+    --warn:         #3aa6e0;   /* logo blue — used sparingly as a highlight */
+
+    --line-dark:    rgba(255,255,255,0.16);
+    --line-light:   rgba(31,73,125,0.14);
+
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body:    'Inter', sans-serif;
+    --font-mono:    'IBM Plex Mono', monospace;
+
+    --max: 1180px;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:var(--font-body);
+    background:var(--bg-light);
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  img,svg{ display:block; max-width:100%; }
+  .wrap{ max-width:var(--max); margin:0 auto; padding:0 28px; }
+
+  h1,h2,h3{ font-family:var(--font-display); letter-spacing:-0.01em; }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--trace-dim);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:18px; height:1px;
+    background:var(--warn);
+  }
+  .eyebrow.on-dark{ color:#fff; }
+  .eyebrow.on-dark::before{ background:var(--trace); }
+
+  /* respect reduced motion everywhere */
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ============================================
+     NAV
+     ============================================ */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(17,21,27,0.0);
+    border-bottom:1px solid transparent;
+    transition:background .3s ease, border-color .3s ease;
+  }
+  header.solid{
+    background:rgba(17,21,27,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line-dark);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 28px;
+    max-width:var(--max); margin:0 auto;
+  }
+  .logo{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.05rem;
+    color:#fff;
+    letter-spacing:0.01em;
+    display:flex; align-items:center; gap:9px;
+  }
+  .logo .dot{ width:7px; height:7px; background:var(--trace); border-radius:1px; }
+  .navlinks{ display:flex; align-items:center; gap:34px; }
+  .navlinks a{
+    font-size:0.88rem; color:#c9cdd4; font-weight:500;
+    transition:color .2s ease;
+  }
+  .navlinks a:hover{ color:#fff; }
+  .navlinks a:focus-visible, .btn:focus-visible, .navlinks button:focus-visible{
+    outline:2px solid var(--trace); outline-offset:3px;
+  }
+  .nav-call{
+    font-family:var(--font-mono); font-size:0.82rem;
+    color:#fff; border:1px solid var(--line-dark);
+    padding:8px 14px; border-radius:2px;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .nav-call:hover{ border-color:var(--warn); background:rgba(58,166,224,0.12); }
+  .navtoggle{ display:none; background:none; border:none; color:#fff; font-size:1.4rem; cursor:pointer; }
+
+  @media (max-width:800px){
+    .navlinks{
+      position:fixed; inset:64px 0 0 0; background:var(--bg-dark);
+      flex-direction:column; align-items:flex-start; padding:28px;
+      gap:22px; transform:translateX(100%); transition:transform .3s ease;
+    }
+    .navlinks.open{ transform:translateX(0); }
+    .navtoggle{ display:block; }
+  }
+
+  /* ============================================
+     HERO
+     ============================================ */
+  .hero{
+    background:var(--bg-dark);
+    color:#fff;
+    padding:168px 0 90px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    /* faint schematic grid backdrop */
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--line-dark) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-dark) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:linear-gradient(to bottom, rgba(0,0,0,0.5), transparent 75%);
+    pointer-events:none;
+  }
+  .hero-inner{ position:relative; z-index:2; max-width:600px; }
+  @media (min-width:960px){
+    .hero-inner{ max-width:500px; }
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 5.2vw, 4.1rem);
+    font-weight:600;
+    line-height:1.05;
+    margin-bottom:22px;
+  }
+  .hero h1 .accent{ color:var(--warn); }
+  .hero p.lede{
+    font-size:1.12rem;
+    color:#c3c8d0;
+    max-width:560px;
+    margin-bottom:36px;
+  }
+  .hero-ctas{ display:flex; flex-wrap:wrap; gap:14px; margin-bottom:64px; }
+  .btn{
+    font-family:var(--font-body); font-weight:600; font-size:0.92rem;
+    padding:14px 26px; border-radius:2px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:8px;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease;
+    border:1px solid transparent;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-primary{ background:var(--trace); color:#08130d; }
+  .btn-primary:hover{ background:var(--warn); color:#fff; }
+  .btn-ghost{ border-color:var(--line-dark); color:#fff; }
+  .btn-ghost:hover{ border-color:#fff; }
+
+  /* ============================================
+     HERO PHOTO PANEL — real substation photo with
+     animated leader-line callouts pointing at gear.
+     Positioned in % so it lines up with the photo's
+     own aspect ratio at any screen size.
+     ============================================ */
+  .hero-panel{
+    position:relative;
+    width:100%;
+    aspect-ratio:1456/840;
+    margin:40px 0 0;
+    border-radius:4px;
+    overflow:hidden;
+    z-index:1;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.5);
+  }
+  @media (min-width:960px){
+    .hero-panel{
+      position:absolute;
+      top:50%; right:0;
+      width:clamp(380px, 42vw, 640px);
+      margin:0;
+      transform:translateY(-50%);
+    }
+  }
+  .hero-panel img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .hero-panel-fade{
+    position:absolute; inset:0;
+    background:linear-gradient(100deg, var(--bg-dark) 0%, rgba(31,73,125,0.55) 14%, rgba(31,73,125,0) 34%);
+    pointer-events:none;
+  }
+  @media (max-width:959px){
+    .hero-panel-fade{ background:linear-gradient(to top, rgba(17,21,27,0.35), transparent 30%); }
+  }
+
+  .callout-lines{ position:absolute; inset:0; width:100%; height:100%; }
+  .callout-lines path{
+    fill:none; stroke:#fff; stroke-width:0.5; opacity:0.9;
+    stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:140; stroke-dashoffset:140;
+    animation:draw-co 0.9s ease-out forwards;
+  }
+  .co-1{ animation-delay:.5s; }
+  .co-2{ animation-delay:.8s; }
+  .co-3{ animation-delay:1.1s; }
+  .co-4{ animation-delay:1.4s; }
+  @keyframes draw-co{ to{ stroke-dashoffset:0; } }
+
+  .callout-dot, .callout-mark, .callout-label{
+    position:absolute;
+    opacity:0;
+    transform:translate(-50%,-50%);
+  }
+  .callout-dot{
+    width:9px; height:9px; border-radius:50%;
+    background:#fff;
+    box-shadow:0 0 0 0 rgba(255,255,255,0.5);
+    animation:dot-in .4s ease-out forwards, dot-pulse 2.2s ease-out infinite;
+  }
+  .callout-mark{
+    width:8px; height:8px;
+    border:1.5px solid var(--warn);
+    animation:mark-in .3s ease-out forwards;
+  }
+  .callout-label{
+    font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.03em;
+    color:#fff; background:rgba(17,21,27,0.55);
+    padding:4px 9px; border-radius:2px; white-space:nowrap;
+    transform:translate(6px,-50%);
+    animation:label-in .4s ease-out forwards;
+  }
+  @keyframes dot-in{ to{ opacity:1; } }
+  @keyframes mark-in{ to{ opacity:1; } }
+  @keyframes label-in{ from{ opacity:0; transform:translate(0,-50%); } to{ opacity:1; transform:translate(6px,-50%); } }
+  @keyframes dot-pulse{
+    0%{ box-shadow:0 0 0 0 rgba(255,255,255,0.5); }
+    70%{ box-shadow:0 0 0 10px rgba(255,255,255,0); }
+    100%{ box-shadow:0 0 0 0 rgba(255,255,255,0); }
+  }
+
+  .cd-1, .cm-1{ animation-delay:1.3s; } .cl-1{ animation-delay:1.3s; }
+  .cd-2, .cm-2{ animation-delay:1.6s; } .cl-2{ animation-delay:1.6s; }
+  .cd-3, .cm-3{ animation-delay:1.9s; } .cl-3{ animation-delay:1.9s; }
+  .cd-4, .cm-4{ animation-delay:2.2s; } .cl-4{ animation-delay:2.2s; }
+
+  .cd-1{ left:62%; top:38%; }
+  .cd-2{ left:68%; top:47%; }
+  .cd-3{ left:80%; top:52%; }
+  .cd-4{ left:93%; top:55%; }
+
+  .cm-1{ left:31.6%; top:10.7%; }
+  .cm-2{ left:29.5%; top:29.8%; }
+  .cm-3{ left:34.3%; top:47.6%; }
+  .cm-4{ left:32.3%; top:66.7%; }
+
+  .cl-1{ left:31.6%; top:10.7%; }
+  .cl-2{ left:29.5%; top:29.8%; }
+  .cl-3{ left:34.3%; top:47.6%; }
+  .cl-4{ left:32.3%; top:66.7%; }
+
+  @media (max-width:600px){
+    .callout-label{ font-size:0.62rem; padding:3px 7px; }
+  }
+
+  .stat-strip{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    border-top:1px solid var(--line-dark);
+    padding-top:32px; margin-top:12px;
+    gap:24px;
+  }
+  .stat-strip div span.num{
+    display:block; font-family:var(--font-mono); font-size:1.5rem; color:var(--trace);
+  }
+  .stat-strip div span.label{
+    display:block; font-size:0.78rem; color:var(--paper-soft); margin-top:4px;
+  }
+  @media (max-width:700px){
+    .stat-strip{ grid-template-columns:1fr; gap:16px; }
+  }
+
+  /* ============================================
+     HAZARD STRIPE — thin divider motif
+     Nod to arc-flash warning labeling.
+     ============================================ */
+  .hazard-rule{
+    height:6px;
+    background:repeating-linear-gradient(
+      -45deg, var(--bg-dark), var(--bg-dark) 12px, #ffffff 12px, #ffffff 24px
+    );
+  }
+
+  /* ============================================
+     SECTION SHELLS
+     ============================================ */
+  section{ padding:100px 0; }
+  .section-light{ background:var(--bg-light); color:var(--ink); }
+  .section-panel{ background:var(--panel-light); }
+  .section-dark{ background:var(--bg-dark); color:#fff; }
+
+  .section-head{ max-width:640px; margin-bottom:56px; }
+  .section-head h2{
+    font-size:clamp(1.7rem,3.4vw,2.5rem); font-weight:600; line-height:1.15;
+    margin-bottom:16px;
+  }
+  .section-head p{ color:var(--ink-soft); font-size:1.02rem; }
+  .section-dark .section-head p{ color:#b7bcc4; }
+
+  /* reveal-on-scroll (matches the IntersectionObserver approach used elsewhere) */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  /* ============================================
+     WHY INDEPENDENT
+     ============================================ */
+  .independent{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:70px; align-items:center; }
+  .independent .copy p{ color:var(--ink-soft); margin-bottom:16px; }
+  .independent .copy p strong{ color:var(--ink); }
+  .badge-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+  .badge{
+    font-family:var(--font-mono); font-size:0.76rem;
+    border:1px solid var(--line-light); padding:7px 12px; border-radius:2px;
+    color:var(--ink-soft);
+  }
+  .schematic{
+    background:var(--panel-dark); border-radius:4px; padding:34px;
+    border:1px solid var(--line-dark);
+  }
+  .schematic svg{ width:100%; height:auto; }
+  @media (max-width:860px){
+    .independent{ grid-template-columns:1fr; gap:40px; }
+  }
+
+  /* ============================================
+     SERVICES
+     ============================================ */
+  .service-grid{
+    display:grid; grid-template-columns:repeat(2,1fr); gap:1px;
+    background:var(--line-light);
+    border:1px solid var(--line-light);
+  }
+  .service-card{
+    background:var(--panel-light); padding:38px;
+    transition:background .25s ease;
+  }
+  .service-card:hover{ background:#f6f7f8; }
+  .service-card .icon{ margin-bottom:20px; }
+  .service-card h3{ font-size:1.2rem; font-weight:600; margin-bottom:10px; }
+  .service-card p.desc{ color:var(--ink-soft); font-size:0.94rem; margin-bottom:20px; }
+  .tag-list{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tag-list span{
+    font-family:var(--font-mono); font-size:0.72rem;
+    background:var(--bg-light); color:var(--ink-soft);
+    padding:5px 10px; border-radius:2px;
+    border:1px solid var(--line-light);
+  }
+  @media (max-width:760px){
+    .service-grid{ grid-template-columns:1fr; }
+  }
+
+  /* ============================================
+     CONTACT
+     ============================================ */
+  .contact-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:70px;
+  }
+  .contact-block h2{ font-size:clamp(1.8rem,3.6vw,2.6rem); font-weight:600; margin-bottom:20px; line-height:1.12; }
+  .contact-block p{ color:#b7bcc4; margin-bottom:34px; max-width:440px; }
+  .contact-list{ display:flex; flex-direction:column; gap:20px; }
+  .contact-list li{ display:flex; flex-direction:column; gap:2px; }
+  .contact-list .k{ font-family:var(--font-mono); font-size:0.72rem; color:var(--warn); letter-spacing:0.08em; text-transform:uppercase; }
+  .contact-list .v{ font-size:1.05rem; }
+  .contact-list a.v:hover{ color:var(--warn); }
+
+  .contact-card{
+    background:var(--panel-dark); border:1px solid var(--line-dark);
+    border-radius:4px; padding:38px;
+  }
+  .contact-card label{ display:block; font-size:0.8rem; color:#b7bcc4; margin:16px 0 6px; }
+  .contact-card label:first-child{ margin-top:0; }
+  .contact-card input, .contact-card textarea{
+    width:100%; background:var(--bg-dark); border:1px solid var(--line-dark);
+    color:#fff; padding:12px 14px; border-radius:2px; font-family:var(--font-body);
+    font-size:0.94rem;
+  }
+  .contact-card input:focus, .contact-card textarea:focus{
+    outline:2px solid var(--trace); outline-offset:1px; border-color:var(--trace);
+  }
+  .contact-card textarea{ resize:vertical; min-height:100px; }
+  .contact-card .btn{ margin-top:22px; width:100%; justify-content:center; }
+  @media (max-width:860px){
+    .contact-grid{ grid-template-columns:1fr; gap:44px; }
+  }
+
+  footer{
+    background:var(--bg-dark); color:#b7c4d4; border-top:1px solid var(--line-dark);
+    padding:26px 0; font-size:0.82rem;
+  }
+  footer .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <nav>
+    <a href="#top" class="logo"><img src="eastenghouse-logo-transparent.png" alt="EASTENGHOUSE" height="26"></a>
+    <ul class="navlinks" id="navLinks">
+      <li><a href="#independent">Why Independent</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="tel:19056294500" class="nav-call">(905) 629-4500</a></li>
+    </ul>
+    <button class="navtoggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </nav>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="eyebrow on-dark">Power Systems Engineering &amp; Testing</div>
+      <h1>Independent by design.<br>Unbiased <span class="accent">under load.</span></h1>
+      <p class="lede">
+        EASTENGHOUSE is a third-party electrical power systems engineering and testing
+        specialist — independent of manufacturers, suppliers and installers, so every
+        result is yours alone to trust.
+      </p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary">Request a consultation</a>
+        <a href="tel:19056294500" class="btn btn-ghost">Call (905) 629-4500</a>
+      </div>
+    </div>
+
+    <div class="hero-panel">
+      <img src="substation-hero.jpg" alt="EASTENGHOUSE substation switchgear and transformer equipment">
+      <div class="hero-panel-fade"></div>
+
+      <svg class="callout-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path class="co co-1" d="M31.6,10.7 L48,10.7 L48,38 L62,38" />
+        <path class="co co-2" d="M29.5,29.8 L52,29.8 L52,47 L68,47" />
+        <path class="co co-3" d="M34.3,47.6 L58,47.6 L58,52 L80,52" />
+        <path class="co co-4" d="M32.3,66.7 L64,66.7 L64,55 L93,55" />
+      </svg>
+
+      <span class="callout-dot cd-1"></span>
+      <span class="callout-dot cd-2"></span>
+      <span class="callout-dot cd-3"></span>
+      <span class="callout-dot cd-4"></span>
+
+      <span class="callout-mark cm-1"></span>
+      <span class="callout-mark cm-2"></span>
+      <span class="callout-mark cm-3"></span>
+      <span class="callout-mark cm-4"></span>
+
+      <span class="callout-label cl-1">Commissioning</span>
+      <span class="callout-label cl-2">Power System Studies</span>
+      <span class="callout-label cl-3">Power Meter Monitoring</span>
+      <span class="callout-label cl-4">Maintenance</span>
+    </div>
+
+    <div class="stat-strip">
+      <div><span class="num">1997</span><span class="label">Serving Ontario's power systems since</span></div>
+      <div><span class="num">100%</span><span class="label">Independent — no equipment to sell</span></div>
+      <div><span class="num">ON, CA</span><span class="label">Mississauga-based, Ontario-wide</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="hazard-rule"></div>
+
+<section class="section-light" id="independent">
+  <div class="wrap independent reveal">
+    <div class="copy">
+      <div class="eyebrow">Why independent matters</div>
+      <h2>An unbiased authority on your power system — not a sales channel for one.</h2>
+      <p>
+        <strong>EASTENGHOUSE functions as an unbiased engineering and testing authority</strong>,
+        fully independent of the manufacturers, suppliers, and installers of the equipment
+        we assess. When a vendor tests their own gear, the incentive is to pass it. When we
+        test it, the incentive is to tell you the truth.
+      </p>
+      <p>
+        That independence runs through every study, every commissioning report, and every
+        maintenance recommendation we deliver — so decisions about your power system are
+        based on data, not a sales relationship.
+      </p>
+      <div class="badge-row">
+        <span class="badge">No equipment sales</span>
+        <span class="badge">Third-party testing</span>
+        <span class="badge">Vendor-neutral reporting</span>
+      </div>
+    </div>
+    <div class="schematic">
+      <svg viewBox="0 0 360 260" aria-hidden="true">
+        <g fill="none" stroke="#ffffff" stroke-width="1.6" opacity="0.9">
+          <rect x="20" y="20" width="90" height="50" rx="2"/>
+          <rect x="250" y="20" width="90" height="50" rx="2"/>
+          <rect x="135" y="105" width="90" height="50" rx="2"/>
+          <rect x="20" y="190" width="90" height="50" rx="2"/>
+          <rect x="250" y="190" width="90" height="50" rx="2"/>
+          <path d="M65,70 L65,105 L135,130"/>
+          <path d="M295,70 L295,105 L225,130"/>
+          <path d="M65,190 L65,155 L135,140"/>
+          <path d="M295,190 L295,155 L225,140"/>
+        </g>
+        <g fill="#b7c4d4" font-family="IBM Plex Mono" font-size="9">
+          <text x="30" y="48">SOURCE</text>
+          <text x="262" y="48">SOURCE</text>
+          <text x="150" y="133">EASTENGHOUSE</text>
+          <text x="30" y="218">LOAD</text>
+          <text x="262" y="218">LOAD</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="section-panel" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">What we do</div>
+      <h2>Four disciplines, one independent standard.</h2>
+      <p>From early-stage studies through years of ongoing maintenance, every service
+      below is delivered to the same unbiased, third-party standard.</p>
+    </div>
+
+    <div class="service-grid reveal">
+      <div class="service-card">
+        <div class="icon">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M3 26L11 12L18 20L26 6" stroke="#1f497d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Power System Studies</h3>
+        <p class="desc">Engineering studies that evaluate existing and proposed system performance, reliability, safety, and economics — before surprises become outages.</p>
+        <div class="tag-list">
+          <span>Short Circuit</span><span>Protection Coordination</span><span>Load Flow</span>
+          <span>Power Quality</span><span>Harmonics &amp; Transients</span><span>Power Factor Correction</span>
+          <span>Motor Starting</span><span>Grounding</span><span>Arc Flash</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="icon">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="12" stroke="#1f497d" stroke-width="2"/><path d="M17 10V17L22 20" stroke="#1f497d" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Commissioning Services</h3>
+        <p class="desc">Verification that new or upgraded equipment performs exactly to design and specification before it's ever put under real load.</p>
+        <div class="tag-list">
+          <span>Commissioning &amp; Acceptance Testing</span><span>Pre-Service &amp; Start-Up</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="icon">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M17 4V10M17 24V30M4 17H10M24 17H30M8 8L12 12M22 22L26 26M26 8L22 12M12 22L8 26" stroke="#1f497d" stroke-width="2" stroke-linecap="round"/><circle cx="17" cy="17" r="6" stroke="#1f497d" stroke-width="2"/></svg>
+        </div>
+        <h3>Maintenance Services</h3>
+        <p class="desc">Planned, predictive maintenance that prevents unexpected outages, reduces equipment failure risk, and keeps systems at optimum operating levels.</p>
+        <div class="tag-list">
+          <span>Predictive / Preventive Maintenance</span><span>Equipment Upgrades</span><span>Infrared Thermographic Inspection</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="icon">
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none"><path d="M6 26V8L17 4L28 8V26L17 22L6 26Z" stroke="#1f497d" stroke-width="2" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Consulting Services</h3>
+        <p class="desc">Technical expertise for the efficient, cost-effective design, repair, and upgrade of power system assets — from concept through delivery.</p>
+        <div class="tag-list">
+          <span>Consulting &amp; Design</span><span>Project Management</span><span>Training &amp; Education</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-dark" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-block reveal">
+      <div class="eyebrow on-dark">Get in touch</div>
+      <h2>Bring us in before the next outage does.</h2>
+      <p>Reach out for a study, a commissioning test, a maintenance program, or just to
+      talk through what your system needs.</p>
+      <ul class="contact-list">
+        <li><span class="k">Phone</span><a class="v" href="tel:19056294500">(905) 629-4500</a></li>
+        <li><span class="k">Email</span><a class="v" href="mailto:info@eastenghouse.com">info@eastenghouse.com</a></li>
+        <li><span class="k">Address</span><span class="v">5484 Tomken Rd, Unit 6<br>Mississauga, Ontario, L4W 2Z6, Canada</span></li>
+      </ul>
+    </div>
+
+    <form class="contact-card reveal" id="contactForm">
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" required>
+      <label for="company">Company</label>
+      <input id="company" name="company" type="text">
+      <label for="message">What do you need help with?</label>
+      <textarea id="message" name="message" required></textarea>
+      <button type="submit" class="btn btn-primary">Send message</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> EASTENGHOUSE Inc. All rights reserved.</span>
+    <span>Mississauga, Ontario, Canada</span>
+  </div>
+</footer>
+
+<script>
+  // ---- Year in footer ----
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // ---- Header goes solid after scrolling past hero ----
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('solid', window.scrollY > 40);
+  });
+
+  // ---- Mobile nav toggle ----
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => navLinks.classList.remove('open'));
+  });
+
+  // ---- Scroll reveal (same IntersectionObserver pattern as the Basket Bliss build) ----
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // ---- Contact form: no backend wired up yet, just a friendly placeholder ----
+  document.getElementById('contactForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('This form isn\'t connected to anything yet — hook it up to Formspree (like the Basket Bliss form) or your own backend to start receiving messages.');
+  });
+</script>
+
+</body>
+</html>
