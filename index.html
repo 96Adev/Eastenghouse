@@ -84,14 +84,12 @@
      ============================================ */
   header{
     position:fixed; top:0; left:0; right:0; z-index:50;
-    background:rgba(17,21,27,0.0);
-    border-bottom:1px solid transparent;
-    transition:background .3s ease, border-color .3s ease;
+    background:#fff;
+    border-bottom:1px solid var(--line-light);
+    transition:box-shadow .3s ease;
   }
   header.solid{
-    background:rgba(17,21,27,0.92);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line-dark);
+    box-shadow:0 4px 20px rgba(0,0,0,0.08);
   }
   nav{
     display:flex; align-items:center; justify-content:space-between;
@@ -101,35 +99,36 @@
   .logo{
     font-family:var(--font-display);
     font-weight:700;
-    font-size:1.05rem;
-    color:#fff;
+    font-size:1.3rem;
+    color:var(--bg-dark);
     letter-spacing:0.01em;
     display:flex; align-items:center; gap:9px;
   }
   .logo .dot{ width:7px; height:7px; background:var(--trace); border-radius:1px; }
   .navlinks{ display:flex; align-items:center; gap:34px; }
   .navlinks a{
-    font-size:0.88rem; color:#c9cdd4; font-weight:500;
+    font-size:0.95rem; color:var(--ink-soft); font-weight:500;
     transition:color .2s ease;
   }
-  .navlinks a:hover{ color:#fff; }
+  .navlinks a:hover{ color:var(--bg-dark); }
   .navlinks a:focus-visible, .btn:focus-visible, .navlinks button:focus-visible{
-    outline:2px solid var(--trace); outline-offset:3px;
+    outline:2px solid var(--warn); outline-offset:3px;
   }
   .nav-call{
-    font-family:var(--font-mono); font-size:0.82rem;
-    color:#fff; border:1px solid var(--line-dark);
+    font-family:var(--font-mono); font-size:0.85rem;
+    color:var(--bg-dark); border:1px solid var(--line-light);
     padding:8px 14px; border-radius:2px;
     transition:border-color .2s ease, background .2s ease;
   }
-  .nav-call:hover{ border-color:var(--warn); background:rgba(58,166,224,0.12); }
-  .navtoggle{ display:none; background:none; border:none; color:#fff; font-size:1.4rem; cursor:pointer; }
+  .nav-call:hover{ border-color:var(--warn); background:rgba(58,166,224,0.08); }
+  .navtoggle{ display:none; background:none; border:none; color:var(--bg-dark); font-size:1.4rem; cursor:pointer; }
 
   @media (max-width:800px){
     .navlinks{
-      position:fixed; inset:64px 0 0 0; background:var(--bg-dark);
+      position:fixed; inset:64px 0 0 0; background:#fff;
       flex-direction:column; align-items:flex-start; padding:28px;
       gap:22px; transform:translateX(100%); transition:transform .3s ease;
+      border-top:1px solid var(--line-light);
     }
     .navlinks.open{ transform:translateX(0); }
     .navtoggle{ display:block; }
@@ -424,7 +423,7 @@
 
 <header id="siteHeader">
   <nav>
-    <a href="#top" class="logo"><img src="eastenghouse-logo-transparent.png" alt="EASTENGHOUSE" height="26"></a>
+    <a href="#top" class="logo"><img src="eastenghouse-logo-transparent.png" alt="EASTENGHOUSE" height="36"></a>
     <ul class="navlinks" id="navLinks">
       <li><a href="#independent">Why Independent</a></li>
       <li><a href="#services">Services</a></li>
@@ -605,7 +604,7 @@
       talk through what your system needs.</p>
       <ul class="contact-list">
         <li><span class="k">Phone</span><a class="v" href="tel:19056294500">(905) 629-4500</a></li>
-        <li><span class="k">Email</span><a class="v" href="mailto:info@eastenghouse.com">info@eastenghouse.com</a></li>
+        <li><span class="k">Email</span><a class="v" href="mailto:stefan@eastenghouse.com">stefan@eastenghouse.com</a></li>
         <li><span class="k">Address</span><span class="v">5484 Tomken Rd, Unit 6<br>Mississauga, Ontario, L4W 2Z6, Canada</span></li>
       </ul>
     </div>
